@@ -69,13 +69,39 @@
     table.appendChild(tbody);
   }
 
+  function setSheetOptions(sheets){
+    const select = el("sheetName");
+    select.innerHTML = "";
+    if (!sheets.length){
+      const opt = document.createElement("option");
+      opt.value = "";
+      opt.textContent = "Nenhuma aba encontrada";
+      select.appendChild(opt);
+      select.disabled = true;
+      return;
+    }
+
+    sheets.forEach(name => {
+      const opt = document.createElement("option");
+      opt.value = name;
+      opt.textContent = name;
+      select.appendChild(opt);
+    });
+    select.disabled = false;
+  }
+
+  function selectSheetName(name){
+    const select = el("sheetName");
+    if (!select.options.length) return;
+    const found = Array.from(select.options).some(opt => opt.value === name);
+    select.value = found ? name : select.options[0].value;
+  }
+
   function applySuggestion(sug){
     if (!sug || !sug.route) return;
     el("matchBadge").textContent = `Match: ${sug.match} • score ${sug.score}`;
-    el("ssid").value = sug.route.targetSpreadsheetId || "";
-    el("sheetName").value = sug.route.targetSheetName || "";
+    selectSheetName(sug.route.targetSheetName || "");
     el("mode").value = sug.route.mode || "APPEND";
-    el("createIfMissing").checked = !!sug.route.createIfMissing;
   }
 
   function applyPrefs(prefs){
@@ -94,10 +120,8 @@
       el("microNote").textContent = "Preferências carregadas (padronização).";
     }
     if (route){
-      el("ssid").value = route.targetSpreadsheetId || "";
-      el("sheetName").value = route.targetSheetName || "";
+      selectSheetName(route.targetSheetName || "");
       el("mode").value = route.mode || "APPEND";
-      el("createIfMissing").checked = !!route.createIfMissing;
       el("microNote").textContent = "Preferências carregadas (rota + padronização).";
     }
   }
@@ -147,10 +171,9 @@
 
   function collectRoute(){
     return {
-      targetSpreadsheetId: el("ssid").value.trim(),
-      targetSheetName: el("sheetName").value.trim() || "BASE",
+      targetSheetName: el("sheetName").value || "BASE",
       mode: el("mode").value,
-      createIfMissing: el("createIfMissing").checked,
+      createIfMissing: false,
     };
   }
 
@@ -287,6 +310,7 @@
       .withSuccessHandler((res) => {
         state.boot = res;
         setStatus("Online ✅");
+        setSheetOptions(res.sheets || []);
         // Se o usuário já marcou “não perguntar”, aplica prefs automático
         applyPrefs(res.prefs);
       })
