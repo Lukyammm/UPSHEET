@@ -50,127 +50,142 @@
               <div>
                 <p class="eyebrow">Configuração</p>
                 <h2 class="section-title">Destino inteligente</h2>
-                <p class="section-sub">Detecta “Internacao”, “Visitante”, etc. e sugere a base.</p>
+                <p class="section-sub">Fluxo em etapas para reduzir ruído visual.</p>
               </div>
               <span class="badge" id="matchBadge">—</span>
             </div>
 
-            <div class="form-grid">
-              <div>
-                <label class="label">Planilha destino</label>
-                <select class="input" id="spreadsheetId"></select>
+            <div class="panel-stack">
+              <div class="panel-block">
+                <p class="eyebrow">Etapa 1</p>
+                <h3 class="section-title section-title-sm">Destino de importação</h3>
+                <div class="form-grid">
+                  <div>
+                    <label class="label">Planilha destino</label>
+                    <select class="input" id="spreadsheetId"></select>
+                  </div>
+
+                  <div>
+                    <label class="label">Aba destino</label>
+                    <select class="input" id="sheetName"></select>
+                  </div>
+
+                  <div>
+                    <label class="label">Modo</label>
+                    <select class="input" id="mode">
+                      <option value="APPEND">Acrescentar (append)</option>
+                      <option value="REPLACE">Substituir (replace)</option>
+                    </select>
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <label class="label">Aba destino</label>
-                <select class="input" id="sheetName"></select>
-              </div>
+              <details class="panel-block panel-collapsible">
+                <summary>
+                  <div>
+                    <p class="eyebrow">Administração</p>
+                    <h3 class="section-title section-title-sm">Cadastro de planilhas e regras</h3>
+                  </div>
+                  <span class="summary-helper">Expandir</span>
+                </summary>
 
-              <div>
-                <label class="label">Modo</label>
-                <select class="input" id="mode">
-                  <option value="APPEND">Acrescentar (append)</option>
-                  <option value="REPLACE">Substituir (replace)</option>
-                </select>
+                <div class="panel-content">
+                  <div class="form-grid">
+                    <div>
+                      <label class="label">Nome da planilha</label>
+                      <input class="input" id="newDestinationName" placeholder="Ex.: Base Financeiro" />
+                    </div>
+                    <div>
+                      <label class="label">URL da planilha</label>
+                      <input class="input" id="newDestinationUrl" placeholder="Cole a URL completa da planilha" />
+                    </div>
+                  </div>
+                  <div class="row row-left">
+                    <button class="btn btn-secondary" id="saveDestinationBtn">Salvar planilha</button>
+                  </div>
+                  <div class="tableWrap">
+                    <table class="table" id="destinationTable"></table>
+                  </div>
+                  <div class="micro" id="destinationNote">—</div>
+
+                  <div class="divider"></div>
+
+                  <div class="form-grid">
+                    <div>
+                      <label class="label">Chave da regra</label>
+                      <input class="input" id="ruleKey" placeholder="Ex.: internacao" />
+                    </div>
+                    <div>
+                      <label class="label">Palavras-chave (;)</label>
+                      <input class="input" id="ruleKeywords" placeholder="Ex.: internacao;leito;paciente" />
+                    </div>
+                  </div>
+                  <div class="row row-left">
+                    <button class="btn btn-secondary" id="saveRuleBtn">Salvar regra</button>
+                  </div>
+                  <div class="tableWrap">
+                    <table class="table" id="rulesTable"></table>
+                  </div>
+                  <div class="micro" id="rulesNote">—</div>
+                </div>
+              </details>
+
+              <details class="panel-block panel-collapsible" open>
+                <summary>
+                  <div>
+                    <p class="eyebrow">Etapa 2</p>
+                    <h3 class="section-title section-title-sm">Estrutura e padronização</h3>
+                  </div>
+                  <span class="summary-helper">Avançado</span>
+                </summary>
+
+                <div class="panel-content">
+                  <p class="eyebrow">Estrutura do arquivo</p>
+                  <div class="filter-chips">
+                    <label class="check-chip">
+                      <input type="checkbox" id="autoLayout" checked />
+                      <span>Detectar automaticamente cabeçalho e coluna inicial</span>
+                    </label>
+                  </div>
+                  <div class="form-grid">
+                    <div>
+                      <label class="label">Cabeçalho na linha</label>
+                      <input class="input" id="headerRowNumber" type="number" min="1" value="1" />
+                    </div>
+                    <div>
+                      <label class="label">Base começa na coluna</label>
+                      <input class="input" id="startColumnLetter" placeholder="A" value="A" />
+                    </div>
+                  </div>
+                  <div class="micro" id="layoutNote">Ajuste se existir conteúdo acima do cabeçalho.</div>
+
+                  <div class="divider"></div>
+
+                  <p class="eyebrow">Qualidade de dados</p>
+                  <div class="filter-chips">
+                    <label class="check-chip"><input type="checkbox" id="trimCells" checked /><span>Tirar espaços (trim)</span></label>
+                    <label class="check-chip"><input type="checkbox" id="removeEmptyRows" checked /><span>Remover linhas vazias</span></label>
+                    <label class="check-chip"><input type="checkbox" id="removeEmptyCols" checked /><span>Remover colunas vazias</span></label>
+                    <label class="check-chip"><input type="checkbox" id="normalizeHeaders" checked /><span>Normalizar cabeçalho</span></label>
+                    <label class="check-chip"><input type="checkbox" id="dedupeHeaders" checked /><span>Evitar cabeçalho duplicado</span></label>
+                    <label class="check-chip"><input type="checkbox" id="numberCoerce" /><span>Converter números</span></label>
+                    <label class="check-chip"><input type="checkbox" id="dateCoerce" /><span>Converter datas (dd/mm/aaaa)</span></label>
+                  </div>
+                </div>
+              </details>
+
+              <div class="panel-block panel-sticky-action">
+                <div class="actions-grid">
+                  <label class="check subtle">
+                    <input type="checkbox" id="dontAskAgain" />
+                    Salvar este padrão para a aba selecionada
+                  </label>
+
+                  <button class="btn btn-primary" id="importBtn" disabled>Etapa 3 · Importar agora</button>
+                </div>
+                <div class="micro" id="microNote">—</div>
               </div>
             </div>
-
-            <div class="divider"></div>
-
-            <div>
-              <p class="eyebrow">Cadastro no sistema</p>
-              <h3 class="section-title section-title-sm">Planilhas e regras</h3>
-              <div class="form-grid">
-                <div>
-                  <label class="label">Nome da planilha</label>
-                  <input class="input" id="newDestinationName" placeholder="Ex.: Base Financeiro" />
-                </div>
-                <div>
-                  <label class="label">URL da planilha</label>
-                  <input class="input" id="newDestinationUrl" placeholder="Cole a URL completa da planilha" />
-                </div>
-              </div>
-              <div class="row">
-                <button class="btn btn-secondary" id="saveDestinationBtn">Salvar planilha</button>
-              </div>
-              <div class="tableWrap">
-                <table class="table" id="destinationTable"></table>
-              </div>
-              <div class="micro" id="destinationNote">—</div>
-
-              <div class="divider"></div>
-
-              <div class="form-grid">
-                <div>
-                  <label class="label">Chave da regra</label>
-                  <input class="input" id="ruleKey" placeholder="Ex.: internacao" />
-                </div>
-                <div>
-                  <label class="label">Palavras-chave (;)</label>
-                  <input class="input" id="ruleKeywords" placeholder="Ex.: internacao;leito;paciente" />
-                </div>
-              </div>
-              <div class="row">
-                <button class="btn btn-secondary" id="saveRuleBtn">Salvar regra</button>
-              </div>
-              <div class="tableWrap">
-                <table class="table" id="rulesTable"></table>
-              </div>
-              <div class="micro" id="rulesNote">—</div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div>
-              <p class="eyebrow">Estrutura do arquivo</p>
-              <h3 class="section-title section-title-sm">Detecção de cabeçalho</h3>
-              <div class="filter-chips">
-                <label class="check-chip">
-                  <input type="checkbox" id="autoLayout" checked />
-                  <span>Detectar automaticamente cabeçalho e coluna inicial</span>
-                </label>
-              </div>
-              <div class="form-grid">
-                <div>
-                  <label class="label">Cabeçalho na linha</label>
-                  <input class="input" id="headerRowNumber" type="number" min="1" value="1" />
-                </div>
-                <div>
-                  <label class="label">Base começa na coluna</label>
-                  <input class="input" id="startColumnLetter" placeholder="A" value="A" />
-                </div>
-              </div>
-              <div class="micro" id="layoutNote">Ajuste se existir conteúdo acima do cabeçalho.</div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div>
-              <p class="eyebrow">Qualidade de dados</p>
-              <h3 class="section-title section-title-sm">Padronização</h3>
-              <div class="filter-chips">
-                <label class="check-chip"><input type="checkbox" id="trimCells" checked /><span>Tirar espaços (trim)</span></label>
-                <label class="check-chip"><input type="checkbox" id="removeEmptyRows" checked /><span>Remover linhas vazias</span></label>
-                <label class="check-chip"><input type="checkbox" id="removeEmptyCols" checked /><span>Remover colunas vazias</span></label>
-                <label class="check-chip"><input type="checkbox" id="normalizeHeaders" checked /><span>Normalizar cabeçalho</span></label>
-                <label class="check-chip"><input type="checkbox" id="dedupeHeaders" checked /><span>Evitar cabeçalho duplicado</span></label>
-                <label class="check-chip"><input type="checkbox" id="numberCoerce" /><span>Converter números</span></label>
-                <label class="check-chip"><input type="checkbox" id="dateCoerce" /><span>Converter datas (dd/mm/aaaa)</span></label>
-              </div>
-            </div>
-
-            <div class="divider"></div>
-
-            <div class="actions-grid">
-              <label class="check subtle">
-                <input type="checkbox" id="dontAskAgain" />
-                Salvar este padrão para a aba selecionada
-              </label>
-
-              <button class="btn btn-primary" id="importBtn" disabled>Importar agora</button>
-            </div>
-
-            <div class="micro" id="microNote">—</div>
           </section>
 
           <section class="card wide">
