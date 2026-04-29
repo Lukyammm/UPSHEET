@@ -162,8 +162,8 @@
   }
 
   .metrics-section { grid-column: span 12; }
-  .drop { grid-column: span 6; }
-  .config-panel { grid-column: span 6; }
+  .drop { grid-column: span 5; }
+  .config-panel { grid-column: span 7; }
   .wide { grid-column: span 12; }
 
   .section-header {
@@ -395,6 +395,59 @@
     color: var(--color-primary);
     border-color: var(--color-primary);
     background: var(--color-primary-soft);
+  }
+
+
+  .panel-stack {
+    display: grid;
+    gap: var(--space-4);
+  }
+
+  .panel-block {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    background: var(--color-surface-strong);
+    padding: var(--space-4);
+  }
+
+  .panel-collapsible summary {
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    gap: var(--space-3);
+  }
+
+  .panel-collapsible summary::-webkit-details-marker { display: none; }
+
+  .summary-helper {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-primary);
+    background: var(--color-primary-soft);
+    border-radius: var(--radius-pill);
+    padding: 6px 10px;
+    white-space: nowrap;
+  }
+
+  .panel-collapsible[open] .summary-helper {
+    color: var(--color-muted);
+    background: var(--color-bg-soft);
+  }
+
+  .panel-content {
+    margin-top: var(--space-4);
+  }
+
+  .row-left {
+    justify-content: flex-start;
+  }
+
+  .panel-sticky-action {
+    position: sticky;
+    bottom: var(--space-3);
+    box-shadow: var(--shadow-soft);
   }
 
   .actions-grid {
